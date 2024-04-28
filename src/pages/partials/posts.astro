@@ -1,0 +1,19 @@
+---
+import { db, Post, asc, gt } from "astro:db";
+import PostComponent from "../../components/PostComponent.astro";
+export const partial = true;
+const cursor = Astro.url.searchParams.get("cursor");
+console.log(cursor);
+const posts = await db
+    .select()
+    .from(Post)
+    .where(cursor ? gt(Post.id, cursor) : undefined)
+    .limit(5)
+    .orderBy(asc(Post.id));
+---
+
+{
+    posts.map((post, i, arr) => {
+        return <PostComponent post={post} loader={arr.length - 1 === i} />;
+    })
+}

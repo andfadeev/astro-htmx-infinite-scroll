@@ -1,0 +1,17 @@
+---
+import { db, Post, asc } from "astro:db";
+interface Props {
+    post: Post;
+    loader: boolean;
+}
+
+const { post, loader } = Astro.props;
+---
+
+<div
+    hx-get={loader && `/partials/posts?cursor=${post.id}`}
+    hx-trigger={loader && "revealed"}
+    hx-swap={loader && "afterend"}
+>
+    [{post.id}] {post.title}
+</div>
